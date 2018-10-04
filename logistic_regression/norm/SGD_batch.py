@@ -65,13 +65,14 @@ def SGD(theta, lr, epoch):
             xi = np.expand_dims(X[i], axis=-1)
             sig = sigmoid(theta, xi)
             grad += ((y[i][0] - sig[0][0]) * xi)
+            loss += ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
 
         grad /= batch
 
-        for i in range(N):
-            xi = np.expand_dims(X[i], axis=-1)
-            sig = sigmoid(theta, xi)
-            loss += ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
+        #for i in range(N):
+        #    xi = np.expand_dims(X[i], axis=-1)
+        #    sig = sigmoid(theta, xi)
+        #    loss += ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
 
         loss /= -N
 

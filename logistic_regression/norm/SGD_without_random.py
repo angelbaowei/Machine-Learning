@@ -7,7 +7,7 @@ N = 80
 M = 2  # M + 1 = 3    1 is bias
 epsilon = 1e-8
 lr = 0.5
-epoch = 2000
+epoch = 1000
 time = 0.05
 
 filename_x = '../ex4x.dat'
@@ -54,9 +54,9 @@ def sigmoid(theta, x):
 def SGD(theta, lr, epoch):
     plt.figure()
     grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
-
+    i = 0
     for count in range(epoch + 1):
-        i = np.random.random_integers(0, N - 1)  # random
+        i = i % N
         xi = np.expand_dims(X[i], axis=-1)
         sig = sigmoid(theta, xi)
         grad = ((y[i][0] - sig[0][0]) * xi)
@@ -69,7 +69,7 @@ def SGD(theta, lr, epoch):
 
         loss /= -N
 
-        if count % 20 == 0:
+        if count % 10 == 0:
             plt.ion()
             plt.subplot(221)
             plt.cla()
@@ -99,7 +99,7 @@ def SGD(theta, lr, epoch):
             plt.scatter(count, loss, color='r', label='loss', s=10)
             plt.subplot(224)
             plt.xlim(0, epoch)
-            plt.ylim(-5, 5)
+            #plt.ylim(-3, 3)
             plt.xlabel('step')
             plt.ylabel('theta')
             plt.title('red : theta0, blue : theta1, green : theta2')
@@ -115,7 +115,10 @@ def SGD(theta, lr, epoch):
             print('************************************************************')
 
         theta = theta + lr * grad
+        if count % 100 == 0 and count != 0:
+            lr = lr * 0.5
 
+        i += 1
 
     plt.ioff()
     plt.show()
