@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from tensorflow.examples.tutorials.mnist import input_data
 
 print('start read dataset...')
-mnist = input_data.read_data_sets("../datasets/")
+mnist = input_data.read_data_sets("./")
 train_images = [mnist.train.images[mnist.train.labels == 0], mnist.train.images[mnist.train.labels == 1]]
 train_labels = [mnist.train.labels[mnist.train.labels == 0], mnist.train.labels[mnist.train.labels == 1]]
 val_images = [mnist.validation.images[mnist.validation.labels == 0], mnist.validation.images[mnist.validation.labels == 1]]
