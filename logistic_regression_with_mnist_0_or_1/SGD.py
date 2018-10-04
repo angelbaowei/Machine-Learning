@@ -34,7 +34,7 @@ print('train_y: ', Y.shape)
 
 
 X_val = np.concatenate([val_images[0], val_images[1]], axis=0)  # (?, 784)
-N_val = N = val_labels[0].shape[0] + val_labels[1].shape[0]  # val number
+N_val = val_labels[0].shape[0] + val_labels[1].shape[0]  # val number
 x0_val = np.ones(shape=(N_val, 1), dtype=np.float32)
 X_val = np.concatenate([x0_val, X_val], axis=-1)
 print('val_x: ', X_val.shape)
