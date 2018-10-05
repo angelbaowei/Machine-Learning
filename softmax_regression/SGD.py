@@ -6,7 +6,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 import random
 
 print('start read dataset...')
-mnist = input_data.read_data_sets("../datasets/")
+mnist = input_data.read_data_sets("./")
 train_images = mnist.train.images
 train_labels = mnist.train.labels
 val_images = mnist.validation.images
