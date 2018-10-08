@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from tensorflow.examples.tutorials.mnist import input_data
 
 print('start read dataset...')
-mnist = input_data.read_data_sets("./")
+mnist = input_data.read_data_sets("../datasets/")
 train_images = [mnist.train.images[mnist.train.labels == 0], mnist.train.images[mnist.train.labels == 1]]
 train_labels = [mnist.train.labels[mnist.train.labels == 0], mnist.train.labels[mnist.train.labels == 1]]
 val_images = [mnist.validation.images[mnist.validation.labels == 0], mnist.validation.images[mnist.validation.labels == 1]]
@@ -43,9 +43,7 @@ Y_val = np.expand_dims(Y_val, axis=-1)
 print('val_y: ', Y_val.shape)
 
 
-theta = np.ndarray(shape=[M, 1], dtype=np.float32)
-for i in range(M):
-    theta[i][0] = np.random.uniform(0.0, 1.0)
+theta = np.zeros(shape=[M, 1], dtype=np.float32)
 
 
 def sigmoid(theta, x):
@@ -55,12 +53,12 @@ def sigmoid(theta, x):
 
 
 def GD(theta, lr, epoch):
-    plt.figure()
-    theta = np.zeros(shape=[M, 1], dtype=np.float32)  # theta init = 0
-    grad = np.zeros(shape=[M, 1], dtype=np.float32)
-    H = np.zeros(shape=[M, M], dtype=np.float32)  # Hessian  matrix
+    plt.figure(figsize=(1920, 1080))
+
     loss = 0
     for count in range(epoch + 1):
+        grad = np.zeros(shape=[M, 1], dtype=np.float32)
+        H = np.zeros(shape=[M, M], dtype=np.float32)  # Hessian  matrix
         for i in range(N):
             xi = np.expand_dims(X[i], axis=-1)
             sig = sigmoid(theta, xi)
@@ -68,7 +66,7 @@ def GD(theta, lr, epoch):
 
             grad += ((sig[0][0] - Y[i][0]) * xi)
 
-            H += sig * sig * np.dot(xi, xi.T)
+            H += sig * (1 - sig) * np.dot(xi, xi.T)
 
         grad /= N  # d j(theta) / d theta
         loss /= -N

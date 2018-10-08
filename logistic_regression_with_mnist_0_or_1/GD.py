@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from tensorflow.examples.tutorials.mnist import input_data
 
 print('start read dataset...')
-mnist = input_data.read_data_sets("./")
+mnist = input_data.read_data_sets("../datasets/")
 train_images = [mnist.train.images[mnist.train.labels == 0], mnist.train.images[mnist.train.labels == 1]]
 train_labels = [mnist.train.labels[mnist.train.labels == 0], mnist.train.labels[mnist.train.labels == 1]]
 val_images = [mnist.validation.images[mnist.validation.labels == 0], mnist.validation.images[mnist.validation.labels == 1]]
@@ -45,7 +45,7 @@ print('val_y: ', Y_val.shape)
 
 theta = np.ndarray(shape=[M, 1], dtype=np.float32)
 for i in range(M):
-    theta[i][0] = np.random.uniform(0.0, 1.0)
+    theta[i][0] = np.random.uniform(-1.0, 1.0)
 
 
 def sigmoid(theta, x):
@@ -55,10 +55,11 @@ def sigmoid(theta, x):
 
 
 def GD(theta, lr, epoch):
+    #plt.figure(figsize=(1920, 1080))
     plt.figure()
-    grad = np.zeros(shape=[M, 1], dtype=np.float32)
-    for count in range(epoch + 1):
 
+    for count in range(epoch + 1):
+        grad = np.zeros(shape=[M, 1], dtype=np.float32)
         loss = 0
         for i in range(N):
             xi = np.expand_dims(X[i], axis=-1)
@@ -69,31 +70,33 @@ def GD(theta, lr, epoch):
         loss /= -N
         grad /= N
 
-        # compute validation dataset accuracy
-        correct = 0
-        temp00, temp01, temp10, temp11 = 0, 0, 0, 0
-        for number in range(N_val):
-            xi = np.expand_dims(X_val[number], axis=-1)
-            h = np.dot(theta.T, xi)
-            if h[0][0] > 0:
-                pred = 1
-                if Y_val[number][0] == pred:
-                    correct += 1
-                    temp11 += 1
-                else:
-                    temp01 += 1
 
-            elif h[0][0] < 0:
-                pred = 0
-                if Y_val[number][0] == pred:
-                    correct += 1
-                    temp00 += 1
-                else:
-                    temp10 += 1
+        if count % 10 == 0:
 
-        acc = float(correct)/ N_val
+            # compute validation dataset accuracy
+            correct = 0
+            temp00, temp01, temp10, temp11 = 0, 0, 0, 0
+            for number in range(N_val):
+                xi = np.expand_dims(X_val[number], axis=-1)
+                h = np.dot(theta.T, xi)
+                if h[0][0] > 0:
+                    pred = 1
+                    if Y_val[number][0] == pred:
+                        correct += 1
+                        temp11 += 1
+                    else:
+                        temp01 += 1
 
-        if count % 2 == 0:
+                elif h[0][0] < 0:
+                    pred = 0
+                    if Y_val[number][0] == pred:
+                        correct += 1
+                        temp00 += 1
+                    else:
+                        temp10 += 1
+
+            acc = float(correct) / N_val
+
             plt.ion()
             plt.subplot(121)
             plt.title('train_loss')
@@ -112,7 +115,7 @@ def GD(theta, lr, epoch):
 
             plt.pause(time)
 
-        if count % 10 == 0:
+        if count % 20 == 0:
             print('loss: ', loss, 'count: ', count, end=' ')
             print('acc = {:.3f}'.format(acc))
             print('************************************************')

@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from tensorflow.examples.tutorials.mnist import input_data
 
 print('start read dataset...')
-mnist = input_data.read_data_sets("./")
+mnist = input_data.read_data_sets("../datasets/")
 train_images = [mnist.train.images[mnist.train.labels == 0], mnist.train.images[mnist.train.labels == 1]]
 train_labels = [mnist.train.labels[mnist.train.labels == 0], mnist.train.labels[mnist.train.labels == 1]]
 val_images = [mnist.validation.images[mnist.validation.labels == 0], mnist.validation.images[mnist.validation.labels == 1]]
@@ -55,48 +55,50 @@ def sigmoid(theta, x):
 
 
 def SGD(theta, lr, epoch):
-    plt.figure()
-    grad = np.zeros(shape=[M, 1], dtype=np.float32)
+    plt.figure(figsize=(1920, 1080))
 
     for count in range(epoch + 1):
+        grad = np.zeros(shape=[M, 1], dtype=np.float32)
         i = np.random.random_integers(0, N - 1)  # random
         xi = np.expand_dims(X[i], axis=-1)
         sig = sigmoid(theta, xi)
         grad = ((Y[i][0] - sig[0][0]) * xi)
-        loss = -((Y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - Y[i][0]) * np.log(1 - sig[0][0] + epsilon))
-        #loss = 0
-        #for i in range(N):
-        #    xi = np.expand_dims(X[i], axis=-1)
-        #    sig = sigmoid(theta, xi)
-        #    loss += ( (Y[i][0] * np.log(sig[0][0] + epsilon)) + (1-Y[i][0]) * np.log(1-sig[0][0] + epsilon) )
-
-        #loss /= -N
-
-        # compute validation dataset accuracy
-        correct = 0
-        temp00, temp01, temp10, temp11 = 0, 0, 0, 0
-        for number in range(N_val):
-            xi = np.expand_dims(X_val[number], axis=-1)
-            h = np.dot(theta.T, xi)
-            if h[0][0] > 0:
-                pred = 1
-                if Y_val[number][0] == pred:
-                    correct += 1
-                    temp11 += 1
-                else:
-                    temp01 += 1
-
-            elif h[0][0] < 0:
-                pred = 0
-                if Y_val[number][0] == pred:
-                    correct += 1
-                    temp00 += 1
-                else:
-                    temp10 += 1
-
-        acc = float(correct)/ N_val
+        #loss = ((Y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - Y[i][0]) * np.log(1 - sig[0][0] + epsilon))
 
         if count % 2 == 0:
+
+            loss = 0
+            for i in range(N):
+                xi = np.expand_dims(X[i], axis=-1)
+                sig = sigmoid(theta, xi)
+                loss += ( (Y[i][0] * np.log(sig[0][0] + epsilon)) + (1-Y[i][0]) * np.log(1-sig[0][0] + epsilon) )
+
+            loss /= -N
+
+            # compute validation dataset accuracy
+            correct = 0
+            temp00, temp01, temp10, temp11 = 0, 0, 0, 0
+            for number in range(N_val):
+                xi = np.expand_dims(X_val[number], axis=-1)
+                h = np.dot(theta.T, xi)
+                if h[0][0] > 0:
+                    pred = 1
+                    if Y_val[number][0] == pred:
+                        correct += 1
+                        temp11 += 1
+                    else:
+                        temp01 += 1
+
+                elif h[0][0] < 0:
+                    pred = 0
+                    if Y_val[number][0] == pred:
+                        correct += 1
+                        temp00 += 1
+                    else:
+                        temp10 += 1
+
+            acc = float(correct) / N_val
+
             plt.ion()
             plt.subplot(121)
             plt.title('train_loss')
