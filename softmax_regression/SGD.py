@@ -6,7 +6,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 import random
 
 print('start read dataset...')
-mnist = input_data.read_data_sets("./")
+mnist = input_data.read_data_sets("../datasets/")
 train_images = mnist.train.images
 train_labels = mnist.train.labels
 val_images = mnist.validation.images
@@ -68,10 +68,9 @@ def softmax(xi, thetaj):
 def SGD(theta, lr, epoch):
     #plt.figure(figsize=(1920, 1080))
     plt.figure()
-    grad = np.zeros(shape=[C, M], dtype=np.float32)
 
     for count in range(epoch + 1):
-
+        grad = np.zeros(shape=[C, M], dtype=np.float32)
         loss = 0
         rdm = random.sample(range(0, N), batch)
 
