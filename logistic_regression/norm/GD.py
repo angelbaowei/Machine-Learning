@@ -52,10 +52,10 @@ def sigmoid(theta, x):
 
 
 def GD(theta, lr, epoch):
-    plt.figure()
-    grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
-    for count in range(epoch + 1):
+    plt.figure(figsize=(1920, 1080))
 
+    for count in range(epoch + 1):
+        grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
         loss = 0
         for i in range(N):
             xi = np.expand_dims(X[i], axis=-1)

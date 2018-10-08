@@ -52,24 +52,32 @@ def sigmoid(theta, x):
 
 
 def SGD(theta, lr, epoch):
-    plt.figure()
-    grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
+    plt.figure(figsize=(1920, 1080))
 
     for count in range(epoch + 1):
+        grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
         i = np.random.random_integers(0, N - 1)  # random
         xi = np.expand_dims(X[i], axis=-1)
         sig = sigmoid(theta, xi)
         grad = ((y[i][0] - sig[0][0]) * xi)
-        loss = ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
-        #loss = 0
+        #loss = ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
+        loss = 0
         #for i in range(N):
         #    xi = np.expand_dims(X[i], axis=-1)
         #    sig = sigmoid(theta, xi)
         #    loss += ( (y[i][0] * np.log(sig[0][0] + epsilon)) + (1-y[i][0]) * np.log(1-sig[0][0] + epsilon) )
 
-        loss /= -N
+        #loss /= -N
 
         if count % 20 == 0:
+
+            for i in range(N):
+                xi = np.expand_dims(X[i], axis=-1)
+                sig = sigmoid(theta, xi)
+                loss += ( (y[i][0] * np.log(sig[0][0] + epsilon)) + (1-y[i][0]) * np.log(1-sig[0][0] + epsilon) )
+
+            loss /= -N
+
             plt.ion()
             plt.subplot(221)
             plt.cla()

@@ -44,9 +44,7 @@ loss_list = []
 theta0_list, theta1_list, theta2_list = [], [], []
 
 
-theta = np.ndarray(shape=[M + 1, 1], dtype=np.float32)
-for i in range(M + 1):
-    theta[i][0] = np.random.uniform(0.0, 1.0)
+theta = np.zeros(shape=[M + 1, 1], dtype=np.float32)
 
 
 def sigmoid(theta, x):
@@ -56,12 +54,14 @@ def sigmoid(theta, x):
 
 
 def Newton(theta, epoch):
-    plt.figure()
-    theta = np.zeros(shape=[M + 1, 1], dtype=np.float32)  # theta init = 0
-    grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
-    H = np.zeros(shape=[M + 1, M + 1], dtype=np.float32)  # Hessian  matrix
+    plt.figure(figsize=(1920, 1080))
+
     loss = 0
     for count in range(epoch + 1):
+
+        grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
+        H = np.zeros(shape=[M + 1, M + 1], dtype=np.float32)  # Hessian  matrix
+
         for i in range(N):
             xi = np.expand_dims(X[i], axis=-1)
             sig = sigmoid(theta, xi)
@@ -69,7 +69,7 @@ def Newton(theta, epoch):
 
             grad += ((sig[0][0] - y[i][0]) * xi)
 
-            H += sig * sig * np.dot(xi, xi.T)
+            H += sig * (1 - sig) * np.dot(xi, xi.T)
 
         grad /= N  # d j(theta) / d theta
         loss /= -N

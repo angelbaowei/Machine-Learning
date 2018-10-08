@@ -10,7 +10,7 @@ lr = 0.5
 epoch = 1000
 time = 0.05
 
-batch = 64
+batch = 32
 
 filename_x = '../ex4x.dat'
 filename_y = '../ex4y.dat'
@@ -54,10 +54,10 @@ def sigmoid(theta, x):
 
 
 def SGD(theta, lr, epoch):
-    plt.figure()
-    grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
+    plt.figure(figsize=(1920, 1080))
 
     for count in range(epoch + 1):
+        grad = np.zeros(shape=[M + 1, 1], dtype=np.float32)
         loss = 0
         list = random.sample(range(0, N), batch)
         for k in range(batch):
@@ -65,7 +65,7 @@ def SGD(theta, lr, epoch):
             xi = np.expand_dims(X[i], axis=-1)
             sig = sigmoid(theta, xi)
             grad += ((y[i][0] - sig[0][0]) * xi)
-            loss += ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
+            #loss += ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
 
         grad /= batch
 
@@ -74,9 +74,17 @@ def SGD(theta, lr, epoch):
         #    sig = sigmoid(theta, xi)
         #    loss += ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
 
-        loss /= -N
+        #loss /= -N
 
         if count % 10 == 0:
+
+            for i in range(N):
+                xi = np.expand_dims(X[i], axis=-1)
+                sig = sigmoid(theta, xi)
+                loss += ((y[i][0] * np.log(sig[0][0] + epsilon)) + (1 - y[i][0]) * np.log(1 - sig[0][0] + epsilon))
+
+            loss /= -N
+
             plt.ion()
             plt.subplot(221)
             plt.cla()
@@ -122,8 +130,8 @@ def SGD(theta, lr, epoch):
             print('************************************************************')
 
         theta = theta + lr * grad
-        if count % 100 == 0 and count != 0:
-            lr = lr * 0.5
+        #if count % 100 == 0 and count != 0:
+            #lr = lr * 0.5
 
 
     plt.ioff()
